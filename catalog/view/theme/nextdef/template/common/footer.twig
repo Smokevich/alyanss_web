@@ -1,0 +1,73 @@
+<footer>
+  <div id="alerts" class="container">
+    <div class="row">
+      {% if informations %}
+      <div class="col-sm-3">
+        <h5>{{ text_information }}</h5>
+        <ul class="list-unstyled">
+         {% for information in informations %}
+          <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+          {% endfor %}
+        </ul>
+        <h5>{{ text_account }}</h5>
+         <ul class="list-unstyled">
+          <li><a href="{{ account }}">{{ text_account }}</a></li>
+          <li><a href="{{ order }}">{{ text_order }}</a></li>
+          <li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>
+          <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>
+        </ul>
+      </div>
+      {% endif %}
+      <div class="col-sm-3">
+        <h5>{{ text_service }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ contact }}">{{ text_contact }}</a></li>
+          <li><a href="{{ return }}">{{ text_return }}</a></li>
+          <li><a href="{{ sitemap }}">{{ text_sitemap }}</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h5>{{ text_extra }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ manufacturer }}">{{ text_manufacturer }}</a></li>
+          <li><a href="{{ voucher }}">{{ text_voucher }}</a></li>
+          <li><a href="{{ affiliate }}">{{ text_affiliate }}</a></li>
+          <li><a href="{{ special }}">{{ text_special }}</a></li>
+        </ul>
+
+      </div>
+
+      <div class="col-sm-3">  
+        <h5>Мы принимаем:</h5>
+        <div class="paymets-footer">
+          <span class="icon-visapay icon-footer"></span>
+          <span class="icon-mastercard icon-footer"></span>
+          <span class="icon-yandexmoney icon-footer"></span>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <p>{{ powered }}</p>
+    <p class="footer-text">Вся информация на сайте – собственность интернет-магазина alyansss.ru. Публикация информации с сайта alyansss.ru без разрешения запрещена. Все права защищены. Информация на сайте alyansss.ru не является публичной офертой. Указанные цены действуют только при оформлении заказа через интернет-магазин ass.com. Вы принимаете условия Соглашения на обработку персональных данных каждый раз, когда оставляете свои данные в любой форме обратной связи на сайте alyansss.ru</p>
+  </div>
+</footer>
+{% for script in scripts %}
+<script src="{{ script }}"></script>
+{% endfor %}
+<script src="catalog/view/javascript/nextdef/nextmenufix.js"></script>
+<script src="catalog/view/javascript/nextdef/jquery.easydropdown.js"></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(56270638, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/56270638" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</body></html>

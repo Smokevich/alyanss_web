@@ -1,0 +1,72 @@
+div.even {
+	background: #FFFFFF;
+}
+div.odd {
+	background: #E4EEF7;
+}
+.help {
+	color: #666;
+	font-size: 11px;
+	font-weight: normal;
+	font-family: Verdana, Geneva, sans-serif;
+	display: block;
+}
+.list {
+	border-collapse: collapse;
+	width: 100%;
+	border-top: 1px solid #DDDDDD;
+	border-left: 1px solid #DDDDDD;
+	margin-bottom: 20px;
+}
+.list td {
+	border-right: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+}
+.list thead td {
+	background-color: #EFEFEF;
+	padding: 0px 5px;
+}
+.list thead td a, .list thead td {
+	text-decoration: none;
+	color: #222222;
+	font-weight: bold;
+}
+.list tbody td a {
+	text-decoration: underline;
+}
+.list tbody td {
+	vertical-align: middle;
+	padding: 0px 5px;
+}
+.list tbody tr:hover td {
+	background-color: #FFFFCB;
+}
+.list tbody tr:nth-child(2n) {
+        background-color: #F4F4F8;
+}
+.list .left {
+	text-align: left;
+	padding: 7px;
+}
+.list .right {
+	text-align: right;
+	padding: 7px;
+}
+.list .center {
+	text-align: center;
+	padding: 7px;
+}
+legend {color: #FF802B; font-weight: bold; border-bottom: 1px dotted #000000;}
+.btn-group-toggle > .btn input[type="radio"], .btn-group-toggle > .btn-group > .btn input[type="radio"], .btn-group-toggle > .btn input[type="checkbox"], .btn-group-toggle > .btn-group > .btn input[type="checkbox"] {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    pointer-events: none;
+}
+.btn-group-toggle > .btn {
+    opacity: 0.7;
+}
+.btn-group-toggle > .btn:focus, .btn-group-toggle > .btn.focus, .btn-group-toggle > .btn:active, .btn-group-toggle > .btn.active {
+    outline: 0;
+    box-shadow: 0 0 0 0.3rem rgba(30, 145, 207, .25);
+    opacity: 1;
+}

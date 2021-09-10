@@ -1,0 +1,276 @@
+<script type="text/javascript">
+var report_desktop = {{ widget.pagespeed.desktop ?: 'null' }};
+var report_mobile = {{ widget.pagespeed.mobile ?: 'null' }};
+</script>
+<div class="col-md-6 form-control-static">
+  <div id="g1" class="bigGauge"></div>
+  <div id="g2" class="bigGauge"></div>
+</div>
+<div class="col-md-6">
+  <h3>Steps you need to take</h3>
+  <table class="table stepsToTake">
+    <tbody>
+      <tr class="{{ nitroData.Nitro.PageCache.Enabled == 'yes' ? 'disabled' }}">
+        <td>1</td>
+        <td>Enable Page Caching</td>
+        <td style="width: 100px"><a onclick="$('html, body').animate({ scrollTop: 0 }, 200, function() { $('a[href=#pagecache]').trigger('click'); });" class="btn btn-small btn-default">Setup Now</a></td>
+      </tr>
+      <tr class="{{ nitroData.Nitro.BrowserCache.Enabled == 'yes' ? 'disabled' }}">
+        <td>2</td>
+        <td>Leverage Browser Caching</td>
+        <td><a onclick="$('html, body').animate({ scrollTop: 0 }, 200, function() { $('a[href=#browsercache]').trigger('click'); });" class="btn btn-small btn-default">Setup Now</a></td>
+      </tr>
+      <tr class="{{ nitroData.Nitro.Compress.Enabled == 'yes' ? 'disabled' }}">
+        <td>3</td>
+        <td>Enable GZIP Compression</td>
+        <td><a onclick="$('html, body').animate({ scrollTop: 0 }, 200, function() { $('a[href=#compression]').trigger('click'); });" class="btn btn-small btn-default">Setup Now</a></td>
+      </tr>
+      <tr class="{{ nitroData.Nitro.Mini.CSS == 'yes' ? 'disabled' }}">
+        <td>4</td>
+        <td>Minify CSS and JavaScript</td>
+        <td><a onclick="$('html, body').animate({ scrollTop: 0 }, 200, function() { $('a[href=#minification]').trigger('click'); });" class="btn btn-small btn-default">Setup Now</a></td>
+      </tr>
+      <tr class="{{ nitroData.Nitro.Mini.HTML == 'yes' ? 'disabled' }}">
+        <td>5</td>
+        <td>Minify HTML</td>
+        <td><a onclick="$('html, body').animate({ scrollTop: 0 }, 200, function() { $('a[href=#minification]').trigger('click'); });" class="btn btn-small btn-default">Setup Now</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="col-xs-12">
+<div class="text-greatscore hidden"><span class="label label-success">Great Score</span>&nbsp;&nbsp;<a href="http://www.seochat.com/c/a/search-engine-optimization-help/google-page-speed-score-vs-website-loading-time/" target="_blank">Top-ranking websites</a> in Google have an average score of 80.78 and yours is <strong id="greatscore-points"></strong>!</div>
+</div>
+
+
+<div class="col-xs-12">
+  <ul class="nav nav-pills gaugeFilterUL" param="performers">
+    <li class="active">
+      <a href="javascript:void(0)" param="desktopScore">Desktop</a>
+    </li>
+    <li>
+      <a href="javascript:void(0)" param="mobileScore">Mobile</a>
+    </li>
+  </ul>
+  <div id="extendedInfo"></div>
+  <div class="alert alert-success performersSuccess" style="display:none"></div>
+</div>
+
+<script type="text/javascript">
+// This fixes a firefox issue with gauges
+if (navigator.appCodeName == 'Mozilla') {
+	$('base').remove();
+}
+var recognizedRules = ["AvoidLandingPageRedirects", "EnableGzipCompression", "LeverageBrowserCaching", "MainResourceServerResponseTime", "MinifyCss", "MinifyHTML", "MinifyJavaScript", "MinimizeRenderBlockingResources", "OptimizeImages", "PrioritizeVisibleContent"];
+
+var notOptimizedImages = [];
+
+var drawReportStats = function() {
+    notOptimizedImages = [];
+    $("#g1,#g2,#extendedInfo").html("");
+    showDesktopReport();
+    $('#g2').show();
+    loadMainGauges();
+    $('#g2').hide();
+    loadDesktopReport();
+    loadMobileReport();
+    addFoldableHandlers();
+
+    if (report_desktop && report_desktop.score && report_desktop.score > 81) {
+        $("#greatscore-points").text(report_desktop.score);
+        $(".text-greatscore").removeClass("hidden");
+    } else {
+        $(".text-greatscore").addClass("hidden");
+    }
+
+    if (notOptimizedImages.length) {
+        $("#optimizeReportedImagesButton").removeClass("hidden");
+    } else {
+        $("#optimizeReportedImagesButton").addClass("hidden");
+    }
+}
+
+var loadMainGauges = function() {
+	new JustGage({
+      id: "g1", 
+      value: (report_desktop && report_desktop.score) ? report_desktop.score : 0, 
+      min: 0,
+      max: 100,
+      relativeGaugeSize: true,
+      title: (report_desktop && report_desktop.error) ? report_desktop.error.message : "Your Site Desktop Page Score",
+      label: "points",
+      levelColors: ["#B20000","#FF9326","#6DD900"],
+    });
+    
+    new JustGage({
+      id: "g2", 
+      value: (report_mobile && report_mobile.score) ? report_mobile.score : 0,
+      min: 0,
+      max: 100,
+      relativeGaugeSize: true,
+      title: (report_mobile && report_mobile.error) ? report_mobile.error.message : "Your Site Mobile Page Score",
+      label: "points",
+      levelColors: ["#B20000","#FF9326","#6DD900"],
+    });
+}
+
+var loadDesktopReport = function() {
+    if (!report_desktop) return;
+
+    var ruleResult = null;
+    var isRulePassed = false;
+    var desktopReportHtml = '<div id="desktopExtendedReport" class="extended-report">';
+    for(x in report_desktop.formattedResults.ruleResults) {
+        ruleResult = report_desktop.formattedResults.ruleResults[x];
+        isRulePassed = (parseInt(ruleResult.ruleImpact) == 0);
+        for (t=0;t<ruleResult.urlBlocks.length;t++) {
+            if (ruleResult.urlBlocks[t].header.args) {
+                var formattedResult = ruleResult.urlBlocks[t].header.format;
+                for(i=0;i<ruleResult.urlBlocks[t].header.args.length;i++) {
+                    if (ruleResult.urlBlocks[t].header.args[i].type != 'HYPERLINK') {
+                        formattedResult = formattedResult.replace('$'+(i+1), ruleResult.urlBlocks[t].header.args[i].value);
+                    } else {
+                        formattedResult = formattedResult.replace('Learn more', '<a target="_blank" href="'+ruleResult.urlBlocks[t].header.args[i].value+'">Learn more</a>');
+                    }
+                }
+                desktopReportHtml += '<li class="'+((isRulePassed) ? 'passedRule' : 'notPassedRule')+'"><span>' + formattedResult + '</span>';
+            }
+
+            if (ruleResult.urlBlocks[t].urls) {
+                desktopReportHtml += '<ul>';
+                for(y=0;y<ruleResult.urlBlocks[t].urls.length;y++) {
+                    if (ruleResult.urlBlocks[t].urls[y].result.args) {
+                        var formattedResult = ruleResult.urlBlocks[t].urls[y].result.format;
+                        for(z=0;z<ruleResult.urlBlocks[t].urls[y].result.args.length;z++) {
+                            if (ruleResult.urlBlocks[t].urls[y].result.args[z].type == 'URL') {
+                                var url = ruleResult.urlBlocks[t].urls[y].result.args[z].value;
+
+                                if (x == "OptimizeImages" && notOptimizedImages.indexOf(url)) {
+                                    notOptimizedImages.push(url);
+                                }
+
+                                formattedResult = formattedResult.replace('$'+(z+1), '<a target="_blank" href="'+url+'">'+url+'</a>');
+                            } else {
+                                formattedResult = formattedResult.replace('$'+(z+1), ruleResult.urlBlocks[t].urls[y].result.args[z].value);
+                            }
+                        }
+                        desktopReportHtml += '<li>' + formattedResult + '</li>';
+                    }
+                }
+                desktopReportHtml += '</ul>';
+            }
+            desktopReportHtml += '</li>';
+        }
+    }
+    desktopReportHtml += '</div>';
+    $('#extendedInfo').append(desktopReportHtml);
+    $('#desktopExtendedReport').append('<ul class="passedRules"><li class="passedRulesCounter resultsToggle">{NUM} Passed rules <span class="pull-right">more <i class="icon-caret-down"></i></span></li></ul><ul class="notPassedRules"><li class="notPassedRulesCounter resultsToggle">{NUM} Rules not passed <span class="pull-right">more <i class="icon-caret-down"></i></span></li></ul>');
+    $('#desktopExtendedReport li.passedRule').appendTo('#desktopExtendedReport ul.passedRules');
+    $('#desktopExtendedReport ul.passedRules li.passedRulesCounter').html($('#desktopExtendedReport ul.passedRules li.passedRulesCounter').html().replace('{NUM}', $('#desktopExtendedReport li.passedRule').size()));
+    $('#desktopExtendedReport li.notPassedRule').appendTo('#desktopExtendedReport ul.notPassedRules');
+    $('#desktopExtendedReport ul.notPassedRules li.notPassedRulesCounter').html($('#desktopExtendedReport ul.notPassedRules li.notPassedRulesCounter').html().replace('{NUM}', $('#desktopExtendedReport li.notPassedRule').size()));
+    $('#desktopExtendedReport li ul').hide().parent().addClass('foldable');
+}
+
+var loadMobileReport = function() {
+    if (!report_mobile) return;
+
+    var ruleResult = null;
+    var isRulePassed = false;
+    var desktopReportHtml = '<div id="mobileExtendedReport" class="extended-report" style="display: none;">';
+    for(x in report_mobile.formattedResults.ruleResults) {
+        if (recognizedRules.indexOf(x) < 0) continue;
+        ruleResult = report_mobile.formattedResults.ruleResults[x];
+        isRulePassed = (parseInt(ruleResult.ruleImpact) == 0);
+        for (t=0;t<ruleResult.urlBlocks.length;t++) {
+            if (ruleResult.urlBlocks[t].header.args) {
+                var formattedResult = ruleResult.urlBlocks[t].header.format;
+                for(i=0;i<ruleResult.urlBlocks[t].header.args.length;i++) {
+                    if (ruleResult.urlBlocks[t].header.args[i].type != 'HYPERLINK') {
+                        formattedResult = formattedResult.replace('$'+(i+1), ruleResult.urlBlocks[t].header.args[i].value);
+                    } else {
+                        formattedResult = formattedResult.replace('Learn more', '<a target="_blank" href="'+ruleResult.urlBlocks[t].header.args[i].value+'">Learn more</a>');
+                    }
+                }
+                desktopReportHtml += '<li class="'+((isRulePassed) ? 'passedRule' : 'notPassedRule')+'"><span>' + formattedResult + '</span>';
+            }
+
+            if (ruleResult.urlBlocks[t].urls) {
+                desktopReportHtml += '<ul>';
+                for(y=0;y<ruleResult.urlBlocks[t].urls.length;y++) {
+                    if (ruleResult.urlBlocks[t].urls[y].result.args) {
+                        var formattedResult = ruleResult.urlBlocks[t].urls[y].result.format;
+                        for(z=0;z<ruleResult.urlBlocks[t].urls[y].result.args.length;z++) {
+                            if (ruleResult.urlBlocks[t].urls[y].result.args[z].type == 'URL') {
+                                var url = ruleResult.urlBlocks[t].urls[y].result.args[z].value;
+
+                                if (x == "OptimizeImages" && notOptimizedImages.indexOf(url)) {
+                                    notOptimizedImages.push(url);
+                                }
+
+                                formattedResult = formattedResult.replace('$'+(z+1), '<a target="_blank" href="'+url+'">'+url+'</a>');
+                            } else {
+                                formattedResult = formattedResult.replace('$'+(z+1), ruleResult.urlBlocks[t].urls[y].result.args[z].value);
+                            }
+                        }
+                        desktopReportHtml += '<li>' + formattedResult + '</li>';
+                    }
+                }
+                desktopReportHtml += '</ul>';
+            }
+            desktopReportHtml += '</li>';
+        }
+    }
+    desktopReportHtml += '</div>';
+    $('#extendedInfo').append(desktopReportHtml);
+    $('#mobileExtendedReport').append('<ul class="passedRules"><li class="passedRulesCounter resultsToggle">{NUM} Passed rules <span class="pull-right">more <i class="icon-caret-down"></i></span></li></ul><ul class="notPassedRules"><li class="notPassedRulesCounter resultsToggle">{NUM} Rules not passed <span class="pull-right">more <i class="icon-caret-down"></i></span></li></ul>');
+    $('#mobileExtendedReport li.passedRule').appendTo('#mobileExtendedReport ul.passedRules');
+    $('#mobileExtendedReport ul.passedRules li.passedRulesCounter').html($('#mobileExtendedReport ul.passedRules li.passedRulesCounter').html().replace('{NUM}', $('#mobileExtendedReport li.passedRule').size()));
+    $('#mobileExtendedReport li.notPassedRule').appendTo('#mobileExtendedReport ul.notPassedRules');
+    $('#mobileExtendedReport ul.notPassedRules li.notPassedRulesCounter').html($('#mobileExtendedReport ul.notPassedRules li.notPassedRulesCounter').html().replace('{NUM}', $('#mobileExtendedReport li.notPassedRule').size()));
+    $('#mobileExtendedReport li ul').hide().parent().addClass('foldable');
+}
+
+var addFoldableHandlers = function() {
+    $('li.foldable').click(function(){
+        $(this).find('ul').slideToggle();
+    });
+
+    $('li.resultsToggle').click(function(){
+        $(this).parent().find('li.passedRule, li.notPassedRule').slideToggle();
+    });
+}
+
+var showDesktopReport = function() {
+    $('#g2').hide();
+    $('#g1').show();
+    $('#mobileExtendedReport').hide();
+    $('#desktopExtendedReport').show();
+    $('.gaugeFilterUL li').removeClass('active');
+    $('.gaugeFilterUL a[param="desktopScore"]').parent().addClass('active');
+}
+
+var showMobileReport = function() {
+    $('#g1').hide();
+    $('#g2').show();
+    $('#desktopExtendedReport').hide();
+    $('#mobileExtendedReport').show();
+    $('.gaugeFilterUL li').removeClass('active');
+    $('.gaugeFilterUL a[param="mobileScore"]').parent().addClass('active');
+}
+
+$('.gaugeFilterUL a').click(function() {
+    if ($(this).attr('param') == 'desktopScore') {
+        showDesktopReport();
+    }
+
+    if ($(this).attr('param') == 'mobileScore') {
+        showMobileReport();
+    }
+});
+
+drawReportStats();
+
+$('.stepsToTake tr.disabled .btn').text('Enabled').removeClass('btn-inverse').addClass('disabled');
+
+</script>

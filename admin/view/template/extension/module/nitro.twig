@@ -1,0 +1,255 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <script>
+nitro.cachemanager.setToken('{{ _GET.user_token }}');
+
+if (typeof getURLVar == 'undefined') {
+  function getURLVar(key) {
+    var value = [];
+    var query = String(document.location).split('?');
+    if (query[1]) {
+      var part = query[1].split('&');
+      for (i = 0; i < part.length; i++) {
+        var data = part[i].split('=');
+        if (data[0] && data[1]) {
+          value[data[0]] = data[1];
+        }
+      }
+      if (value[key]) {
+        return value[key];
+      } else {
+        return '';
+      }
+    }
+  } 
+}
+  </script>
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-7">
+          <h1>{{ heading_title }}</h1>
+          <ul class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-md-5 form-control-static" id="NitroPackButtons">
+          <div class="btn-group"> 
+            <a href="javascript:void(0)" class="btn btn-default dropdown-toggle"  data-toggle="dropdown"><i class="icon-trash first-level-spinner"></i> &nbsp;Clear Cache&nbsp; <span class="caret"></span></a> 
+            <ul class="dropdown-menu">
+              <li><a href="javascript:void(0)" onclick="nitro.cachemanager.clearNitroCaches();"><i class="icon-trash"></i> Clear Nitro Cache</a></li>
+              <li class="divider"></li>
+              <li><a href="javascript:void(0)" onclick="nitro.cachemanager.clearPageCache();">Clear Page Cache</a></li>
+              <li><a href="javascript:void(0)" onclick="nitro.cachemanager.clearDBCache();">Clear Database Cache</a></li>
+              <li><a href="javascript:void(0)" onclick="nitro.cachemanager.clearSystemCache();">Clear System Cache</a></li>
+              <li><a href="javascript:void(0)" onclick="nitro.cachemanager.clearImageCache();">Clear Image Cache</a></li>
+              <li><a href="javascript:void(0)" onclick="nitro.cachemanager.clearCSSCache();">Clear CSS Cache</a></li>
+              <li><a href="javascript:void(0)" onclick="nitro.cachemanager.clearJSCache();">Clear JavaScript Cache</a></li>
+              <li><a href="javascript:void(0)" onclick="nitro.cachemanager.clearVqmodCache();">Clear vQmod Cache</a></li>
+              <li class="divider"></li>
+              <li><a href="javascript:void(0)" onclick="nitro.cachemanager.clearAllCaches();"><i class="icon-trash"></i> Clear All Caches</a></li>
+            </ul>
+          </div>
+          <button type="submit" class="btn btn-primary save-changes" form="form"><i class="icon-ok"></i> Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid" id="NitroPackContainer">
+    {% if nitroData.Nitro.LicensedOn is empty %}
+    <div class="alert alert-danger fade in">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <h4>Warning! Unlicensed version of the module!</h4>
+      <p>You are running an unlicensed version of this module! You need to enter your license code to ensure proper functioning, access to support and updates.</p><div style="height:5px;"></div>
+      <a class="btn btn-danger" href="javascript:void(0)" onclick="$('a[href=\'#isense_support\']').trigger('click')">Enter your license code</a>
+    </div>
+    {% endif %}
+
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="icon-exclamation-sign"></i> {{ error_warning }}</div>
+    {% endif %}
+
+    {% if success %}
+    <div class="alert alert-success"><i class="icon-ok-sign"></i> {{ success }}</div>
+    {% endif %}
+
+    {% if inMaintenanceMode %}
+    <div class="alert alert-warning">
+      <i class="icon-exclamation-sign"></i> Maintenance mode is enabled for your website. NitroPack will not work while Maintenance mode is enabled.
+    </div>
+    {% endif %}
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ heading_title_long }}</h3>
+      </div>
+      <div class="panel-body">
+
+        <form action="" method="post" id="form">
+          <div class="tabbable">
+            <div class="tab-navigation">        
+              <ul class="nav nav-tabs nav-justified mainMenuTabs">
+                <li class="active"><a href="#pane1" data-toggle="tab">Dashboard</a></li>
+                <li><a href="#generalsettings" data-toggle="tab">Settings</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cache Systems <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#pagecache" data-toggle="tab">Page cache</a></li>
+                    <li><a href="#dbcache" data-toggle="tab">Database cache</a></li>                        
+                    <li><a href="#browsercache" data-toggle="tab">Browser cache</a></li>
+                    <li><a href="#imagecache" data-toggle="tab">Image cache</a></li>                    
+                  </ul>
+
+                </li>
+                <li><a href="#compression" data-toggle="tab">Compression</a></li>
+                <li><a href="#minification" data-toggle="tab">Minification</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">CDN <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#cdn" data-toggle="tab">Generic CDN Service</a></li>
+                    <li><a href="#cdn-cloudflare" data-toggle="tab">CloudFlare CDN</a></li>
+                  </ul>
+                </li>
+                <li><a href="#cron_tab" data-toggle="tab">CRON</a></li>
+                <li><a href="#smushit" data-toggle="tab">Image Optimization</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Get Support <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#isense_support" data-toggle="tab">Get Support and Updates</a></li>
+                    <li><a href="#qa" data-toggle="tab">Frequently Asked Questions</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#support-premium-services" class="premiumServicesMenuItem" data-toggle="tab"><i class="icon-briefcase"></i> &nbsp;&nbsp;Premium Services</a></li>
+                  </ul>
+                </li>            
+              </ul>
+            </div>
+
+            <div class="tab-content">
+              <div id="pane1" class="extended-report tab-pane active googlePageReportWidget">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="box-heading">
+                      <h1>Page Report &nbsp;<i class="icon-refresh" id="icon-refresh-pagespeed" title="Re-gather report data" onclick="nitro.pagespeed.refresh(); $(this).addClass('icon-spin')"></i><i class="icon-pagespeed"></i></h1>
+                    </div>
+                    <div class="box-content">
+                      <div class="row">
+                        {{ include("#{module_path}/pagespeed_widget.twig") }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="box-heading">
+                      <h1><i class="icon-briefcase"></i> Want to speed up your store even more?</h1>
+                    </div>
+                    <div class="box-content mini-jumbotron">
+                      <p>NitroPack does an awesome array of cool techy things that give your store an amazing speed boost, improve SEO and SEM and achieve higher search engine scores. Since every store has an unique set-up, there are many theme-specific and server-specific optimizations that can improve site loading speed even further. Our Premium Services are a proven method to overachieve and redefine what a fast OpenCart website is. All services are hand-coded, by our development team. Please get in touch with us at for a free consultation.</p>
+                      <a href="mailto:sales@isenselabs.com?subject=Free Consultation" class="btn btn-default pull-right" target="_blank">
+                        <i class="icon-thumbs-up"></i>  Get Free Consultation
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <div id="generalsettings" class="tab-pane">
+                {{ include("#{module_path}/settings_pane.twig") }}
+              </div>
+              <div id="pagecache" class="tab-pane">
+                {{ include("#{module_path}/pagecache_pane.twig") }}
+              </div>
+              <div id="compression" class="tab-pane">
+                {{ include("#{module_path}/compression_pane.twig") }}
+              </div>
+              <div id="minification" class="tab-pane">
+                {{ include("#{module_path}/minification_pane.twig") }}
+              </div>
+              <div id="browsercache" class="tab-pane">
+                {{ include("#{module_path}/browsercache_pane.twig") }}
+              </div>
+              <div id="imagecache" class="tab-pane">
+                {{ include("#{module_path}/imagecache_pane.twig") }}
+              </div>
+              <div id="dbcache" class="tab-pane">
+                {{ include("#{module_path}/dbcache_pane.twig") }}
+              </div>
+              <div id="cdn" class="tab-pane">
+                {{ include("#{module_path}/cdn_pane.twig") }}
+              </div>
+              <div id="cdn-cloudflare" class="tab-pane">
+                {{ include("#{module_path}/cdn-cloudflare_pane.twig") }}
+              </div>
+              <div id="smushit" class="tab-pane">
+                {{ include("#{module_path}/smushit_pane.twig") }}
+              </div>
+              <div id="cron_tab" class="tab-pane">
+                {{ include("#{module_path}/cron_pane.twig") }}
+              </div>
+              <div id="qa" class="tab-pane">
+                {{ include("#{module_path}/qa_pane.twig") }}
+              </div>
+              <div id="isense_support" class="tab-pane">
+                {{ include("#{module_path}/support_pane.twig") }}
+              </div>
+              <div id="support-premium-services" class="tab-pane">
+                {{ include("#{module_path}/premiumservices_pane.twig") }}
+              </div>
+            </div><!-- /.tab-content -->
+          </div><!-- /.tabbable -->
+        </form>
+        <script>
+if (window.localStorage && window.localStorage['currentTab']) {
+  $('.mainMenuTabs a[href="'+window.localStorage['currentTab']+'"]').trigger('click');  
+}
+
+if (window.localStorage && window.localStorage['currentSubTab']) {
+  $('a[href="'+window.localStorage['currentSubTab']+'"]').trigger('click');  
+}
+
+$('.mainMenuTabs a[data-toggle="tab"]').click(function() {
+  if (window.localStorage) {
+    window.localStorage['currentTab'] = $(this).attr('href');
+  }
+});
+
+$('a[data-toggle="tab"]:not(.mainMenuTabs a[data-toggle="tab"])').click(function() {
+  if (window.localStorage) {
+    window.localStorage['currentSubTab'] = $(this).attr('href');
+  }
+});
+        </script>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Progress Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="progressModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Clear cache progress</h4>
+      </div>
+      <div class="modal-body">
+        <p>It looks like this is taking longer than usual. Probably there are a lot of cache files. Here is a more detailed view of the progress</p>
+        <ul class="progress-list list-unstyled" style="line-height: 26px;">
+        </ul>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of Progress Modal -->
+<script>
+nitro.pagespeed.setToken('{{ _GET.user_token }}');
+nitro.pagespeed.setApiKey($('#pagespeedApiKey').val());
+nitro.pagespeed.setSaveUrl('{{ pagespeedSaveUrl }}');
+nitro.pagespeed.setStoreUrl('{{ pagespeedStoreUrl }}');
+nitro.pagespeed.setPrecacheUrl('{{ pagespeedPrecacheUrl }}');
+</script>
+
+{{ footer }}

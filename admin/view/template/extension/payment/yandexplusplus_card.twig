@@ -1,0 +1,355 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-cod" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if (error_warning) %} 
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %} 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i></h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-cod" class="form-horizontal">
+          <div class="form-group required">
+            <label class="col-sm-2 control-label">{{ entry_register }}</label>
+            <div class="col-sm-10">
+             <div class="alert alert-info"><i class="fa fa-exclamation-triangle"></i>  {{ text_register }} {{ text_secret }} {{ text_secret_next }} </div></div>
+          </div>
+          <div class="form-group required">
+            <label class="col-sm-2 control-label">{{ entry_login }}</label>
+            <div class="col-sm-10"><input class="form-control" type="text" name="payment_yandexplusplus_card_login" value="{% if (payment_yandexplusplus_card_login is defined) %}{{ payment_yandexplusplus_card_login }}{% endif %}" />
+              <br />
+              {% if (error_login) %} 
+              <div class="text-danger">{{ error_login }}</div>
+              {% endif %}</div>
+          </div>
+        <div class="form-group required">
+        <label class="col-sm-2 control-label">{{ entry_password }}</label>
+        <div class="col-sm-10"><input class="form-control" type="password" name="payment_yandexplusplus_card_password" value="{% if (payment_yandexplusplus_card_login is defined) %}{{ payment_yandexplusplus_card_password }}{% endif %}" />
+          <br />
+          {% if (error_password) %} 
+          <div class="text-danger">{{ error_password }}</div>
+          {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2">Адрес HTTP-уведомления:</label>
+          <div class="col-sm-10">{{ copy_result_url }}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_name_tab }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;" >{% if (payment_yandexplusplus_card_name_attach) %} 
+            <input type="radio" name="payment_yandexplusplus_card_name_attach" value="1" checked="checked" />
+            {{ text_my }} 
+            <input type="radio" name="payment_yandexplusplus_card_name_attach" value="0" />
+            {{ text_default }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_name_attach" value="1" />
+            {{ text_my }} 
+            <input type="radio" name="payment_yandexplusplus_card_name_attach" value="0" checked="checked" />
+            {{ text_default }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_name }}</label>
+          <div class="col-sm-10">{% for language in languages %} 
+            <img src="{{ language.imgsrc }}" title="{{ language.name }}" style="vertical-align:top;"/> <textarea class="form-control" name="payment_yandexplusplus_card_name_{{ language.language_id }}" cols="50" rows="1">{% if payment_yandexplusplus_card_name_[language.language_id] %}{{ payment_yandexplusplus_card_name_[language.language_id] }}{% endif %}</textarea><br />{% endfor %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_fixen }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_fixen == 'proc') %} 
+            <input type="radio" name="payment_yandexplusplus_card_fixen" value="fix" />
+            {{ entry_fixen_fix }} 
+            <input type="radio" name="payment_yandexplusplus_card_fixen" value="proc" checked="checked" />
+            {{ entry_fixen_proc }} 
+            <input type="radio" name="payment_yandexplusplus_card_fixen" value="0" />
+            {{ entry_fixen_order }} 
+            {% elseif (payment_yandexplusplus_card_fixen == 'fix') %} 
+            <input type="radio" name="payment_yandexplusplus_card_fixen" value="fix" checked="checked" />
+            {{ entry_fixen_fix }} 
+            <input type="radio" name="payment_yandexplusplus_card_fixen" value="proc" />
+            {{ entry_fixen_proc }} 
+            <input type="radio" name="payment_yandexplusplus_card_fixen" value="0" />
+            {{ entry_fixen_order }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_fixen" value="fix" />
+            {{ entry_fixen_fix }} 
+            <input type="radio" name="payment_yandexplusplus_card_fixen" value="proc" />
+            {{ entry_fixen_proc }} 
+            <input type="radio" name="payment_yandexplusplus_card_fixen" value="0" checked="checked" />
+            {{ entry_fixen_order }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_fixen_amount }}</label>
+          <div class="col-sm-10"><input class="form-control" type="text" name="payment_yandexplusplus_card_fixen_amount" value="{{ payment_yandexplusplus_card_fixen_amount is defined ? payment_yandexplusplus_card_fixen_amount : '' }}" ><br />
+          {% if (error_fixen) %} 
+          <div class="text-danger">{{ error_fixen }}</div>
+          {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_komis }}</label>
+          <div class="col-sm-10"><input class="form-control" type="text" name="payment_yandexplusplus_card_komis" value="{{ payment_yandexplusplus_card_komis is defined ? payment_yandexplusplus_card_komis : '' }}" >%</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_maxpay }}</label>
+          <div class="col-sm-10"><input class="form-control" type="text" name="payment_yandexplusplus_card_maxpay" value="{{ payment_yandexplusplus_card_maxpay is defined ? payment_yandexplusplus_card_maxpay : '' }}" >руб.</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_style }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_style) %} 
+            <input type="radio" name="payment_yandexplusplus_card_style" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_style" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_style" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_style" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_later }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_button_later) %} 
+            <input type="radio" name="payment_yandexplusplus_card_button_later" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_button_later" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_button_later" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_button_later" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ text_createorder_or_notcreate }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_createorder_or_notcreate) %} 
+            <input type="radio" name="payment_yandexplusplus_card_createorder_or_notcreate" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_createorder_or_notcreate" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_createorder_or_notcreate" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_createorder_or_notcreate" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_success_alert_admin_tab }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_success_alert_admin) %} 
+            <input type="radio" name="payment_yandexplusplus_card_success_alert_admin" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_success_alert_admin" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_success_alert_admin" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_success_alert_admin" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_success_alert_customer_tab }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_success_alert_customer) %} 
+            <input type="radio" name="payment_yandexplusplus_card_success_alert_customer" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_success_alert_customer" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_success_alert_customer" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_success_alert_customer" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_instruction_tab }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_instruction_attach) %} 
+            <input type="radio" name="payment_yandexplusplus_card_instruction_attach" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_instruction_attach" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_instruction_attach" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_instruction_attach" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_instruction }}</label>
+          <div class="col-sm-10">{% for language in languages %} 
+          <img src="{{ language.imgsrc }}" title="{{ language.name }}" style="vertical-align:top;"/> <textarea class="form-control" name="payment_yandexplusplus_card_instruction_{{ language.language_id }}" cols="50" rows="3">{% if payment_yandexplusplus_card_instruction_[language.language_id] %}{{ payment_yandexplusplus_card_instruction_[language.language_id] }}{% endif %}</textarea><br />{% endfor %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_mail_instruction_tab }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_mail_instruction_attach) %} 
+            <input type="radio" name="payment_yandexplusplus_card_mail_instruction_attach" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_mail_instruction_attach" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_mail_instruction_attach" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_mail_instruction_attach" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_mail_instruction }}</label>
+          <div class="col-sm-10">{% for language in languages %} 
+          <img src="{{ language.imgsrc }}" title="{{ language.name }}" style="vertical-align:top;"/> <textarea class="form-control" name="payment_yandexplusplus_card_mail_instruction_{{ language.language_id }}" cols="50" rows="3">{% if payment_yandexplusplus_card_mail_instruction_[language.language_id] %}{{ payment_yandexplusplus_card_mail_instruction_[language.language_id] }}{% endif %}</textarea><br />{% endfor %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_success_comment_tab }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_success_comment_attach) %} 
+            <input type="radio" name="payment_yandexplusplus_card_success_comment_attach" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_success_comment_attach" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_success_comment_attach" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="payment_yandexplusplus_card_success_comment_attach" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_success_comment }}</label>
+          <div class="col-sm-10">{% for language in languages %} 
+          <img src="{{ language.imgsrc }}" title="{{ language.name }}" style="vertical-align:top;"/> <textarea class="form-control" name="payment_yandexplusplus_card_success_comment_{{ language.language_id }}" cols="50" rows="3">{% if payment_yandexplusplus_card_success_comment_[language.language_id] %}{{ payment_yandexplusplus_card_success_comment_[language.language_id] }}{% endif %}</textarea><br />{% endfor %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_hrefpage_tab }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_hrefpage_text_attach) %} 
+            <input type="radio" name="payment_yandexplusplus_card_hrefpage_text_attach" value="1" checked="checked" />
+            {{ text_my }} 
+            <input type="radio" name="payment_yandexplusplus_card_hrefpage_text_attach" value="0" />
+            {{ text_default }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_hrefpage_text_attach" value="1" />
+            {{ text_my }} 
+            <input type="radio" name="payment_yandexplusplus_card_hrefpage_text_attach" value="0" checked="checked" />
+            {{ text_default }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_hrefpage }}</label>
+          <div class="col-sm-10">{% for language in languages %} 
+          <img src="{{ language.imgsrc }}" title="{{ language.name }}" style="vertical-align:top;"/> <textarea class="form-control" name="payment_yandexplusplus_card_hrefpage_text_{{ language.language_id }}" cols="50" rows="3">{% if payment_yandexplusplus_card_hrefpage_text_[language.language_id] %}{{ payment_yandexplusplus_card_hrefpage_text_[language.language_id] }}{% endif %}</textarea><br />{% endfor %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_success_page_tab }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_success_page_text_attach) %} 
+            <input type="radio" name="payment_yandexplusplus_card_success_page_text_attach" value="1" checked="checked" />
+            {{ text_my }} 
+            <input type="radio" name="payment_yandexplusplus_card_success_page_text_attach" value="0" />
+            {{ text_default }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_success_page_text_attach" value="1" />
+            {{ text_my }} 
+            <input type="radio" name="payment_yandexplusplus_card_success_page_text_attach" value="0" checked="checked" />
+            {{ text_default }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_success_page_text }}</label>
+          <div class="col-sm-10">{% for language in languages %} 
+          <img src="{{ language.imgsrc }}" title="{{ language.name }}" style="vertical-align:top;"/> <textarea class="form-control" name="payment_yandexplusplus_card_success_page_text_{{ language.language_id }}" cols="50" rows="3">{% if payment_yandexplusplus_card_success_page_text_[language.language_id] %}{{ payment_yandexplusplus_card_success_page_text_[language.language_id] }}{% endif %}</textarea><br />{% endfor %}</div>
+        </div>
+         <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_waiting_page_tab }}</label>
+          <div class="col-sm-10 control-label" style="text-align:left;">{% if (payment_yandexplusplus_card_waiting_page_text_attach) %} 
+            <input type="radio" name="payment_yandexplusplus_card_waiting_page_text_attach" value="1" checked="checked" />
+            {{ text_my }} 
+            <input type="radio" name="payment_yandexplusplus_card_waiting_page_text_attach" value="0" />
+            {{ text_default }} 
+            {% else %} 
+            <input type="radio" name="payment_yandexplusplus_card_waiting_page_text_attach" value="1" />
+            {{ text_my }} 
+            <input type="radio" name="payment_yandexplusplus_card_waiting_page_text_attach" value="0" checked="checked" />
+            {{ text_default }} 
+            {% endif %}</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_waiting_page_text }}</label>
+          <div class="col-sm-10">{% for language in languages %} 
+          <img src="{{ language.imgsrc }}" title="{{ language.name }}" style="vertical-align:top;"/> <textarea class="form-control" name="payment_yandexplusplus_card_waiting_page_text_{{ language.language_id }}" cols="50" rows="3">{% if payment_yandexplusplus_card_waiting_page_text_[language.language_id] %}{{ payment_yandexplusplus_card_waiting_page_text_[language.language_id] }}{% endif %}</textarea><br />{% endfor %}</div>
+        </div>
+        <div class="form-group">
+        <label class="col-sm-2 control-label">{{ entry_on_status }}</label>
+        <div class="col-sm-10"><select class="form-control" name="payment_yandexplusplus_card_on_status_id">
+            {% for order_status in order_statuses %} 
+            {% if (order_status.order_status_id == payment_yandexplusplus_card_on_status_id) %} 
+            <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+            {% else %} 
+            <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+            {% endif %} 
+            {% endfor %} 
+          </select></div>
+        </div>
+        <div class="form-group">
+        <label class="col-sm-2 control-label">{{ entry_order_status }}</label>
+        <div class="col-sm-10"><select class="form-control" name="payment_yandexplusplus_card_order_status_id">
+            {% for order_status in order_statuses %} 
+            {% if (order_status.order_status_id == payment_yandexplusplus_card_order_status_id) %} 
+            <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+            {% else %} 
+            <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+            {% endif %} 
+            {% endfor %} 
+          </select></div>
+        </div>
+        <div class="form-group">
+        <label class="col-sm-2 control-label">{{ entry_geo_zone }}</label>
+        <div class="col-sm-10"><select class="form-control" name="payment_yandexplusplus_card_geo_zone_id">
+            <option value="0">{{ text_all_zones }}</option>
+            {% for geo_zone in geo_zones %} 
+            {% if (geo_zone.geo_zone_id == payment_yandexplusplus_card_geo_zone_id) %} 
+            <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+            {% else %} 
+            <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+            {% endif %} 
+            {% endfor %} 
+          </select></div>
+        </div>
+        <div class="form-group">
+        <label class="col-sm-2 control-label">{{ entry_status }}</label>
+        <div class="col-sm-10"><select class="form-control" name="payment_yandexplusplus_card_status">
+            {% if (payment_yandexplusplus_card_status) %} 
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            <option value="0">{{ text_disabled }}</option>
+            {% else %} 
+            <option value="1">{{ text_enabled }}</option>
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% endif %} 
+          </select></div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">{{ entry_sort_order }}</label>
+          <div class="col-sm-10"><input class="form-control" type="text" name="payment_yandexplusplus_card_sort_order" value="{{ payment_yandexplusplus_card_sort_order }}" size="1" /></div>
+        </div>
+      </form>
+    </div>
+      <p style="text-align:center;">YandexPlusPlus {{ version }}</p>
+  </div>
+</div>
+</div>
+{{ footer }}

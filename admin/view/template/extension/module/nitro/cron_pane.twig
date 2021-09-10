@@ -1,0 +1,125 @@
+<div class="box-heading"><h1>Local CRON</h1></div>
+<div class="box-content">
+  <div class="row form-group">
+    <div class="col-md-3">Local CRON status<span class="help">Enable/Disable server-side CRON job. Note that this option will work only on servers with an enabled <strong>crontab</strong> Linux command.</span></div>
+    <div class="col-md-6">
+      <select class="form-control" name="Nitro[CRON][Local][Status]">
+        <option value="no" {{ nitroData.Nitro.CRON.Local.Status != 'yes' ? 'selected' }}>Disabled</option>
+        <option value="yes" {{ nitroData.Nitro.CRON.Local.Status == 'yes' ? 'selected' }}>Enabled</option>
+      </select>
+      {% if cron_error %} 
+      <div class="form-control-static">
+        <div class="alert alert-danger">{{ cron_error }}</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3">Local CRON frequency<span class="help">Choose which days of the week and on what time you need the CRON job.</span></div>
+    <div class="col-md-6">
+      <p class="cron_input_box">
+      <span><input class="form-control" type="checkbox" name="Nitro[CRON][Local][Weekday][]" value="1" {{ '1' in nitroData.Nitro.CRON.Local.Weekday ? 'checked' }} /> Monday</span>
+      <span><input class="form-control" type="checkbox" name="Nitro[CRON][Local][Weekday][]" value="2" {{ '2' in nitroData.Nitro.CRON.Local.Weekday ? 'checked' }} /> Tuesday</span>
+      <span><input class="form-control" type="checkbox" name="Nitro[CRON][Local][Weekday][]" value="3" {{ '3' in nitroData.Nitro.CRON.Local.Weekday ? 'checked' }} /> Wednesday</span>
+      <span><input class="form-control" type="checkbox" name="Nitro[CRON][Local][Weekday][]" value="4" {{ '4' in nitroData.Nitro.CRON.Local.Weekday ? 'checked' }} /> Thursday</span>
+      <span><input class="form-control" type="checkbox" name="Nitro[CRON][Local][Weekday][]" value="5" {{ '5' in nitroData.Nitro.CRON.Local.Weekday ? 'checked' }} /> Friday</span>
+      <span><input class="form-control" type="checkbox" name="Nitro[CRON][Local][Weekday][]" value="6" {{ '6' in nitroData.Nitro.CRON.Local.Weekday ? 'checked' }} /> Saturday</span>
+      <span><input class="form-control" type="checkbox" name="Nitro[CRON][Local][Weekday][]" value="7" {{ '7' in nitroData.Nitro.CRON.Local.Weekday ? 'checked' }} /> Sunday</span>
+      </p>
+      <p>
+      <select name="Nitro[CRON][Local][Hour]" class="form-control input-mini inline-input">
+        {% for i in 0..23 %}
+        <option value="{{ i }}" {{ nitroData.Nitro.CRON.Local.Hour == i ? 'selected' }}>{{ i }}</option>
+        {% endfor %}
+      </select>
+      <select name="Nitro[CRON][Local][Minute]" class="form-control input-mini inline-input">
+        {% for i in 0..59 %}
+        <option value="{{ i }}" {{ nitroData.Nitro.CRON.Local.Minute == i ? 'selected' }}>{{ i }}</option>
+        {% endfor %}
+      </select>
+      &nbsp;&nbsp;<small>Server time is: <strong>{{ server_time }}</strong></small>
+      </p>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3">Local CRON behavior<span class="help">How would you like your Local CRON job to behave?</span></div>
+    <div class="col-md-6">
+      <div>
+        <input class="form-control" type="checkbox" name="Nitro[CRON][Local][Delete]" {{ nitroData.Nitro.CRON.Local.Delete ? 'checked' }} value="1" /> Delete outdated NitroPack cache files. This applies for: PageCache, Minification, Database Cache
+      </div>
+      <div>
+        <input class="form-control" type="checkbox" name="Nitro[CRON][Local][PreCache]" {{ nitroData.Nitro.CRON.Local.PreCache ? 'checked' }} value="1" /> Pre-Cache common pages: home page, categories (up to level 3), information pages, special offers.
+      </div>
+      <div>
+        <input class="form-control" type="checkbox" name="Nitro[CRON][Local][SendEmail]" {{ nitroData.Nitro.CRON.Local.SendEmail ? 'checked' }} value="1" /> Send an e-mail to <strong>{{ admin_email }}</strong> after task completion
+      </div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3">Path to the PHP binary<span class="help">If your PHP binary is not in the default location, use this option to set the correct path.</span></div>
+    <div class="col-md-6">
+      <input class="form-control" type="input" name="Nitro[CRON][Local][PHPBinary]" value="{{ nitroData.Nitro.CRON.Local.PHPBinary ?: '/usr/bin/env php' }}" />
+    </div>
+  </div>
+  {% if cron_command %}
+  <div class="row form-group">
+    <div class="col-md-3">Local CRON command<span class="help">You can insert this command into your <strong>crontab</strong>, if your server does not support <strong>exec()</strong></span></div>
+    <div class="col-md-6">
+      <pre>{{ cron_command }}</pre>
+    </div>
+  </div>
+  {% endif %}
+</div>
+<div class="box-heading"><h1>Remote CRON</h1></div>
+<div class="box-content">
+  <div class="row form-group">
+    <div class="col-md-3">Remote CRON URL<span class="help">If the server-side CRON job does not work, you can use a third-party CRON service.</span></div>
+    <div class="col-md-6">
+      Remote URL token:<span class="help">This token will be used to identify valid requests. If you refresh it, do not forget to click Save on the top right.</span><br />
+      <input class="form-control inline-input" type="text" name="Nitro[CRON][Remote][Token]" value="{{ nitroData.Nitro.CRON.Remote.Token ?: '' }}" /> <span class="btn btn-default" id="cron_refresh_token"><i class="icon icon-refresh"></i></span><br />
+
+      <input type="text" class="form-control" readonly id="cron_url" data-url="{{ cron_token_url }}" />
+
+      <script type="text/javascript">
+$(document).ready(function() {
+  var cron_refresh_token = function() {
+    $('#cron_url_info').remove();
+    $('#cron_url').before('<p id="cron_url_info">Paste this URL in the third-party CRON service:</p>');
+    var newVal = $('#cron_url').attr('data-url').replace('{CRON_TOKEN}', $('input[name="Nitro[CRON][Remote][Token]"]').val());
+    $('#cron_url').val(newVal);
+  }
+
+  $('#cron_refresh_token').on('click', function(e) {
+    e.preventDefault();
+    $('input[name="Nitro[CRON][Remote][Token]"]').val(Math.random().toString().substr(2, 16));
+    cron_refresh_token();
+  });
+
+  if ($('input[name="Nitro[CRON][Remote][Token]"]').val() != '') {
+    cron_refresh_token();
+  } else {
+    $('#cron_refresh_token').trigger('click');
+  }
+
+  $('input[name="Nitro[CRON][Remote][Token]"]').change(function() {
+    $('#cron_refresh_token').trigger('click');
+  });
+});
+      </script>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3">Remote CRON behavior<span class="help">How would you like your Remote CRON job to behave?</span></div>
+    <div class="col-md-6">
+      <div>
+        <input class="form-control" type="checkbox" name="Nitro[CRON][Remote][Delete]" {{ nitroData.Nitro.CRON.Remote.Delete ? 'checked' }} value="1" /> Delete outdated NitroPack cache files. This applies for: PageCache, Minification, Database Cache
+      </div>
+      <div>
+        <input class="form-control" type="checkbox" name="Nitro[CRON][Remote][PreCache]" {{ nitroData.Nitro.CRON.Remote.PreCache ? 'checked' }} value="1" /> Pre-Cache common pages: home page, categories (up to level 3), information pages, special offers.
+      </div>
+      <div>
+        <input class="form-control" type="checkbox" name="Nitro[CRON][Remote][SendEmail]" {{ nitroData.Nitro.CRON.Remote.SendEmail ? 'checked' }} value="1" /> Send an e-mail to <strong>{{ admin_email }}</strong> after task completion
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,218 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-latest" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>		
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+		</div>
+      <h1>{{ heading_title }}</h1><br />
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+	{% if error_warning %}
+    		<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    		</div>
+    	{% endif %}
+    	{% if success %}
+    		<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    		</div>
+    	{% endif %}
+	<div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+	  <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-latest" class="form-horizontal">
+	    <input type="hidden" name="name" value="{{ text_edit }}">
+		<input type="hidden" name="status" value="1">
+		
+		<ul class="nav nav-tabs">
+		    <li><a href="#tab-products" data-toggle="tab">{{ text_tab_products }}</a></li>
+			<li class="active"><a href="#tab-categories" data-toggle="tab">{{ text_tab_categories }}</a></li>
+			<li><a href="#tab-manufacturers" data-toggle="tab">{{ text_tab_manufacturers }}</a></li>
+			<li><a href="#tab-informations" data-toggle="tab">{{ text_tab_informations }}</a></li>			
+							
+						</ul>
+		
+		<div class="tab-content">
+		<div id="tab-categories" class="tab-pane active">
+		<div class="form-group">
+			<div class="col-sm-4">
+				<b>{{ text_categories }}</b><br>
+				<p>{{ text_categories_desc }}</p>
+			</div>
+			<div class="col-sm-8">
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_title }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[category_title]" style="height: 50px;" class="form-control">{{ seogenerator_module['category_title'] is defined ? seogenerator_module['category_title'] : '' }}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_description }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[category_description]" style="height: 50px;" class="form-control">{{ seogenerator_module['category_description'] is defined ? seogenerator_module['category_description'] : '' }}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_h1 }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[category_h1]" style="height: 50px;" class="form-control">{{ seogenerator_module['category_h1'] is defined ? seogenerator_module['category_h1'] : '' }}</textarea>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_keywords }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[category_keywords]" style="height: 50px;" class="form-control">{{ seogenerator_module['category_keywords'] is defined ? seogenerator_module['category_keywords'] : '' }}</textarea>
+					</div>
+				</div>
+
+			</div>			
+		</div>
+		</div>
+		<div id="tab-products" class="tab-pane">
+		<div class="form-group">
+			<div class="col-sm-4">
+				<b>{{ text_products }}</b><br>
+				<p>{{ text_products_desc }}</p>
+			</div>
+			<div class="col-sm-8">
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_title }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[product_title]" style="height: 50px;" class="form-control">{{ seogenerator_module['product_title'] is defined ? seogenerator_module['product_title'] : '' }}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_description }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[product_description]" style="height: 50px;" class="form-control">{{ seogenerator_module['product_description'] is defined ? seogenerator_module['product_description'] : '' }}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_h1 }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[product_h1]" style="height: 50px;" class="form-control">{{ seogenerator_module['product_h1'] is defined ? seogenerator_module['product_h1'] : '' }}</textarea>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_keywords }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[product_keywords]" style="height: 50px;" class="form-control">{{ seogenerator_module['product_keywords'] is defined ? seogenerator_module['product_keywords'] : '' }}</textarea>
+					</div>
+				</div>
+				
+			</div>			
+		</div>
+		</div>
+		<div id="tab-manufacturers" class="tab-pane">
+		<div class="form-group">
+			<div class="col-sm-4">
+				<b>{{ text_manufacturers }}</b><br>
+				<p>{{ text_manufacturers_desc }}</p>
+			</div>
+			<div class="col-sm-8">
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_title }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[manufacturer_title]" style="height: 50px;" class="form-control">{{ seogenerator_module['manufacturer_title'] is defined ? seogenerator_module['manufacturer_title'] : '' }}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_description }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[manufacturer_description]" style="height: 50px;" class="form-control">{{ seogenerator_module['manufacturer_description'] is defined ? seogenerator_module['manufacturer_description'] : '' }}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_h1 }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[manufacturer_h1]" style="height: 50px;" class="form-control">{{ seogenerator_module['manufacturer_h1'] is defined ? seogenerator_module['manufacturer_h1'] : '' }}</textarea>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_keywords }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[manufacturer_keywords]" style="height: 50px;" class="form-control">{{ seogenerator_module['manufacturer_keywords'] is defined ? seogenerator_module['manufacturer_keywords'] : '' }}</textarea>
+					</div>
+				</div>
+				
+			</div>			
+		</div>
+		</div>
+		<div id="tab-informations" class="tab-pane">
+		<div class="form-group">
+			<div class="col-sm-4">
+				<b>{{ text_informations }}</b><br>
+				<p>{{ text_informations_desc }}</p>
+			</div>
+			<div class="col-sm-8">
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_title }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[information_title]" style="height: 50px;" class="form-control">{{ seogenerator_module['information_title'] is defined ? seogenerator_module['information_title'] : '' }}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_description }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[information_description]" style="height: 50px;" class="form-control">{{ seogenerator_module['information_description'] is defined ? seogenerator_module['information_description'] : '' }}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-4">
+						<b>{{ text_keywords }}</b>
+					</div>
+					<div class="col-sm-8">
+						<textarea name="seogenerator_module[information_keywords]" style="height: 50px;" class="form-control">{{ seogenerator_module['information_keywords'] is defined ? seogenerator_module['information_keywords'] : '' }}</textarea>
+					</div>
+				</div>
+				
+			</div>			
+		</div>
+		</div>
+		</div>
+	  </form>
+	</div>
+  </div>
+</div>
+{{ footer }}

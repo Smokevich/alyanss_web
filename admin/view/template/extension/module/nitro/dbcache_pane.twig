@@ -1,0 +1,216 @@
+<div class="row">
+  <div class="col-md-8">
+    <div class="box-heading"><h1>Database cache</h1></div>
+    <div class="box-content">
+      <div class="row form-group">
+        <div class="col-md-3">Database cache<span class="help">Caches results from common MySQL queries.</span></div>
+        <div class="col-md-3">
+          <select name="Nitro[DBCache][Enabled]" class="form-control DBCache">
+            <option value="no" {{ nitroData.Nitro.DBCache.Enabled != 'yes' ? 'selected' }}>Disabled</option>
+            <option value="yes" {{ nitroData.Nitro.DBCache.Enabled == 'yes' ? 'selected' }}>Enabled</option>
+          </select>
+          <a href="javascript:void(0)" onclick="nitro.cachemanager.clearDBCache();" class="btn btn-default clearDbCache"><i class="icon-trash first-level-spinner"></i> Clear Database Cache</a>
+        </div>
+      </div>
+
+      {% if DBCacheStatus != -1 %}
+      <div class="row form-group">
+        <div class="col-md-3">Database cache status</div>
+        <div class="col-md-3">
+          {% if DBCacheStatus == 1 %}
+          <span class="label label-success">Working</span>
+          {% else %}
+          <span class="label label-danger">Not Working</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <hr />
+      <div class="dbcache-tabbable-parent">
+        <div class="tabbable tabs-left"> 
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#dbcache-general" data-toggle="tab">General</a></li>
+            <li><a href="#dbcache-products" data-toggle="tab">Products</a></li>
+            <li><a href="#dbcache-categories" data-toggle="tab">Categories</a></li>
+            <li><a href="#dbcache-seourls" data-toggle="tab">SEO URLs</a></li>
+            <li><a href="#dbcache-search" data-toggle="tab">Search</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="dbcache-general" class="tab-pane active">
+              <div class="row form-group">
+                <div class="col-md-3">Cache Storage<span class="help">Choose a storage system. If you wish to choose memory storage, you should have eAccelerator / XCache / Memcache available for data caching on your system. The options in grey color are <i>not available</i> in your system. Note that NitroPack is compatible with eAccelerator versions prior to 0.9.6.<br /><br />If you choose the File system (hard-drive) storage method, this may lead to a slower performance on some servers. It is best to disable the whole Database cache if this occurs.</span></div>
+                <div class="col-md-5">
+                  <select class="form-control" name="Nitro[DBCache][CacheDepo]">
+                    <option value="hdd" {{ not nitroData.Nitro.DBCache.CacheDepo or nitroData.Nitro.DBCache.CacheDepo == 'hdd' ? 'selected' }}>File system (hard-drive)</option>
+                    <option value="ram_eaccelerator" {{ nitroData.Nitro.DBCache.CacheDepo == 'ram_eaccelerator' ? 'selected' }} {{ not eaccelerator_available ? 'disabled style="color:#aaa;"' }}>Memory (RAM) - eAccelerator (Only for eAccelerator 0.9.4 and older)</option>
+                    <option value="ram_xcache" {{ nitroData.Nitro.DBCache.CacheDepo == 'ram_xcache' ? 'selected' }} {{ not xcache_available ? 'disabled style="color:#aaa;"' }}>Memory (RAM) - XCache</option>
+                    <option value="ram_memcache" {{ nitroData.Nitro.DBCache.CacheDepo == 'ram_memcache' ? 'selected' }} {{ not memcache_available ? 'disabled style="color:#aaa;"' }}>Memory (RAM) - Memcache</option>
+                    <option value="ram_memcached" {{ nitroData.Nitro.DBCache.CacheDepo == 'ram_memcached' ? 'selected' }} {{ not memcached_available ? 'disabled style="color:#aaa;"' }}>Memory (RAM) - Memcached</option>
+                    <option value="ram_redis" {{ nitroData.Nitro.DBCache.CacheDepo == 'ram_redis' ? 'selected' }} {{ not redis_available ? 'disabled style="color:#aaa;"' }}>Memory (RAM) - Redis</option>
+                  </select><br />
+                  <div class="ram_settings memcache_settings form">
+                    <div class="row form-group">
+                      <div class="col-md-5">
+                        Memcache server:<span class="help">(default: localhost)</span>
+                      </div>
+                      <div class="col-md-7">
+                        <input class="form-control" type="text" name="Nitro[DBCache][MemcacheHost]" value="{{ nitroData.Nitro.DBCache.MemcacheHost ?: 'localhost' }}" />
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-5">
+                        Memcache port:<span class="help">(default: 11211)</span>
+                      </div>
+                      <div class="col-md-7">
+                        <input class="form-control" type="text" name="Nitro[DBCache][MemcachePort]" value="{{ nitroData.Nitro.DBCache.MemcachePort ?: '11211' }}" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ram_settings memcached_settings form">
+                    <div class="row form-group">
+                      <div class="col-md-5">
+                        Memcached server:<span class="help">(default: localhost)</span>
+                      </div>
+                      <div class="col-md-7">
+                        <input class="form-control" type="text" name="Nitro[DBCache][MemcachedHost]" value="{{ nitroData.Nitro.DBCache.MemcachedHost ?: 'localhost' }}" />
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-5">
+                        Memcached port:<span class="help">(default: 11211)</span>
+                      </div>
+                      <div class="col-md-7">
+                        <input class="form-control" type="text" name="Nitro[DBCache][MemcachedPort]" value="{{ nitroData.Nitro.DBCache.MemcachedPort ?: '11211' }}" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ram_settings redis_settings form">
+                    <div class="row form-group">
+                      <div class="col-md-5">
+                        Redis server:<span class="help">(default: localhost)</span>
+                      </div>
+                      <div class="col-md-7">
+                        <input class="form-control" type="text" name="Nitro[DBCache][RedisHost]" value="{{ nitroData.Nitro.DBCache.RedisHost ?: 'localhost' }}" />
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-5">
+                        Redis port:<span class="help">(default: 6379)</span>
+                      </div>
+                      <div class="col-md-7">
+                        <input class="form-control" type="text" name="Nitro[DBCache][RedisPort]" value="{{ nitroData.Nitro.DBCache.RedisPort ?: '6379' }}" />
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-5">
+                        Redis password:
+                      </div>
+                      <div class="col-md-7">
+                        <input class="form-control" type="text" name="Nitro[DBCache][RedisPassword]" value="{{ nitroData.Nitro.DBCache.RedisPassword ?: '' }}" />
+                      </div>
+                    </div>
+                  </div>
+                  <script type="text/javascript">
+$('select[name="Nitro[DBCache][CacheDepo]"]').change(function() {
+  switch( $(this).val() ) {
+    case 'ram_memcache':
+      $('.ram_settings').hide();
+      $('.memcache_settings').show();
+      break;
+    case 'ram_memcached':
+      $('.ram_settings').hide();
+      $('.memcached_settings').show();
+      break;
+    case 'ram_redis':
+      $('.ram_settings').hide();
+      $('.redis_settings').show();
+      break;
+    default:
+      $('.ram_settings').hide();
+      $('.memcached_settings').hide();
+  }
+}).trigger('change');
+                  </script>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-3">Expire Time (seconds)<span class="help">If the cache files get older than this time, it will be re-cached automatically.</span></div>
+                <div class="col-md-3">
+                  <input class="form-control" type="text" name="Nitro[DBCache][ExpireTime]" value="{{ nitroData.Nitro.DBCache.ExpireTime ?: '86400' }}" />
+                </div>
+              </div>
+            </div>
+            <div id="dbcache-products" class="tab-pane">
+              <div class="row form-group">
+                <div class="col-md-3">Cache Product Count Queries</div>
+                <div class="col-md-3">
+                  <select class="form-control" name="Nitro[DBCache][ProductCountQueries]">
+                    <option value="no" {{ nitroData.Nitro.DBCache.ProductCountQueries != 'yes' ? 'selected' }}>No</option>
+                    <option value="yes" {{ nitroData.Nitro.DBCache.ProductCountQueries == 'yes' ? 'selected' }}>Yes (Recommended)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div id="dbcache-categories" class="tab-pane">
+              <div class="row form-group">
+                <div class="col-md-3">Cache Category Queries</div>
+                <div class="col-md-3">
+                  <select class="form-control" name="Nitro[DBCache][CategoryQueries]">
+                    <option value="no" {{ nitroData.Nitro.DBCache.CategoryQueries != 'yes' ? 'selected' }}>No (Recommended)</option>
+                    <option value="yes" {{ nitroData.Nitro.DBCache.CategoryQueries == 'yes' ? 'selected' }}>Yes</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-3">Cache Category Count Queries</div>
+                <div class="col-md-3">
+                  <select class="form-control" name="Nitro[DBCache][CategoryCountQueries]">
+                    <option value="no" {{ nitroData.Nitro.DBCache.CategoryCountQueries != 'yes' ? 'selected' }}>No</option>
+                    <option value="yes" {{ nitroData.Nitro.DBCache.CategoryCountQueries == 'yes' ? 'selected' }}>Yes (Recommended)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div id="dbcache-seourls" class="tab-pane">
+              <div class="row form-group">
+                <div class="col-md-3">Cache SEO URLs</div>
+                <div class="col-md-3">
+                  <select class="form-control" name="Nitro[DBCache][SeoUrls]">
+                    <option value="no" {{ nitroData.Nitro.DBCache.SeoUrls != 'yes' ? 'selected' }}>No</option>
+                    <option value="yes" {{ nitroData.Nitro.DBCache.SeoUrls == 'yes' ? 'selected' }}>Yes (Recommended)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div id="dbcache-search" class="tab-pane">
+              <div class="row form-group">
+                <div class="col-md-3">Search Keywords Caching</div>
+                <div class="col-md-3">
+                  <select class="form-control" name="Nitro[DBCache][Search]">
+                    <option value="no" {{ nitroData.Nitro.DBCache.Search != 'yes' ? 'selected' }}>Disabled</option>
+                    <option value="yes" {{ nitroData.Nitro.DBCache.Search == 'yes' ? 'selected' }}>Enabled</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-3">Search Keywords<span class="help">Comma separated. The query results of these keywords will be cached. Most effective when used for very popular search queries on your site.</span></div>
+                <div class="col-md-3">
+                  <textarea class="form-control" placeholder="e.g. imac, macbook pro, cheap imac, discounts" style="width:100%; height:180px;" name="Nitro[DBCache][SearchKeywords]">{{ nitroData.Nitro.DBCache.SearchKeywords ?: '' }}</textarea>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="box-heading"><h1><i class="icon-info-sign"></i>&nbsp;&nbsp;Database cache</h1></div>
+    <div class="box-content" style="min-height:100px; line-height:20px;">
+      <p>NitroPack can cache the database queries in OpenCart known for their slow execution time. If Page Cache or Browser Cache are enabled, on some places the Database Cache will be superseded by the other caches.</p>
+      <P>Use this cache when you want to optimize some frequent, but expensive database queries. Hard-disk and memory storage options are available.</P>
+    </div>
+  </div>
+</div>

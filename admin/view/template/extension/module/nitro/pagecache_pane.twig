@@ -1,0 +1,123 @@
+<div class="row">
+  <div class="col-md-7">
+    <div class="box-heading"><h1>Page Cache Settings</h1></div>
+    <div class="box-content">
+      <div class="row form-group">
+        <div class="col-md-4">Page Cache Status<span class="help">Enables caching of the rendered HTML of your site on the first page load. The subsequent requests will be served directly from the cached HTML.</span></div>
+        <div class="col-md-4">
+          <select name="Nitro[PageCache][Enabled]" class="form-control NitroPageCacheEnabled">
+            <option value="yes" {{ nitroData.Nitro.PageCache.Enabled == 'yes' ? 'selected' }}>Enabled (Recommended)</option>
+            <option value="no" {{ nitroData.Nitro.PageCache.Enabled != 'yes' ? 'selected' }}>Disabled</option>
+          </select>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-4">Expire Time (seconds)<span class="help">If the cache files get older than this time, they will be re-cached automatically. <strong>Default: </strong>2592000</span></span></div>
+        <div class="col-md-4">
+          <input class="form-control" name="Nitro[PageCache][ExpireTime]" type="text" value="{{ nitroData.Nitro.PageCache.ExpireTime ?: pagecache_default_expiration_time }}" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-4">Responsive theme optimization<span class="help">Enabling this will use single page cache file for all devices. By default this is <b>disabled</b> and NitroPack creates individual page cache files for each device type (e.g mobile, tablet, desktop). Only enable this if your theme is responsive.</span></div>
+        <div class="col-md-4">
+          <select class="form-control" name="Nitro[PageCache][MergeDeviceCache]">
+            <option value="no" {{ nitroData.Nitro.PageCache.MergeDeviceCache == 'no' ? 'selected' }}>Disabled</option>
+            <option value="yes" {{ nitroData.Nitro.PageCache.MergeDeviceCache == 'yes' ? 'selected' }}>Enabled</option>
+          </select>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-4">Add width/height attributes to images<span class="help">Enabling this help for faster image rendering by your browser. Note: This option is not compatible with some OpenCart themes. If your images get stretched because of this option, it is recommended to disable it.</span></div>
+        <div class="col-md-4">
+          <select class="form-control" name="Nitro[PageCache][AddWHImageAttributes]">
+            <option value="yes" {{ nitroData.Nitro.PageCache.AddWHImageAttributes == 'yes' ? 'selected' }}>Enabled</option>
+            <option value="no" {{ nitroData.Nitro.PageCache.AddWHImageAttributes != 'yes' ? 'selected' }}>Disabled</option>
+          </select>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-4">Clear cache on product edit<span class="help">When enabled, the PageCache for a specific product will get cleared on one of the following conditions:<br />- after you modify this product from the admin panel<br />- after a customer purchases this product<br />- after you edit an order containing the product</span></div>
+        <div class="col-md-4">
+          <div class="alert alert-info" style="margin-top: 10px;">
+            <strong>Careful.</strong> Enable this option only if your MySQL user has CREATE and ALTER permissions.
+          </div>
+          <select class="form-control" name="Nitro[PageCache][ClearCacheOnProductEdit]">
+            <option value="no" {{ nitroData.Nitro.PageCache.ClearCacheOnProductEdit != 'yes' ? 'selected' }}>Disabled</option>
+            <option value="yes" {{ nitroData.Nitro.PageCache.ClearCacheOnProductEdit == 'yes' ? 'selected' }}>Enabled</option>
+          </select>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-4">Ignored Routes<span class="help">Routes (e.g. common/home) to be ignored from the page cache. One route per line.</span></div>
+        <div class="col-md-4">
+          <textarea class="form-control" name="Nitro[PageCache][IgnoredRoutes]" style="width:100%; height:180px;" placeholder="One route per line, e.g. information/sitemap">{{ nitroData.Nitro.PageCache.IgnoredRoutes ?: '' }}</textarea>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-4">Allowed AJAX Routes<span class="help">Allow these routes to be cached when requested via AJAX. One route per line.</span></div>
+        <div class="col-md-4">
+          <textarea class="form-control" name="Nitro[PageCache][AllowedAjaxRoutes]" style="width:100%; height:180px;" placeholder="One route per line, e.g. information/sitemap">{{ nitroData.Nitro.PageCache.AllowedAjaxRoutes ?: '' }}</textarea>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-4">Supported cookies<span class="help">Take the following cookies into account when building cache. One cookie per line. Wildcards "<b>*</b>" are supported</span></div>
+        <div class="col-md-4">
+          <textarea class="form-control" name="Nitro[PageCache][SupportedCookies]" style="width:100%; height:180px;" placeholder="One cookie per line, e.g. header_notice*">{{ nitroData.Nitro.PageCache.SupportedCookies ?: '' }}</textarea>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-4">Store Front Widget<span class="help">This is a small stripe in the very bottom of your website showing useful data. Allows to clear the cache for the current page from the front end.</span></div>
+        <div class="col-md-4">
+          <select name="Nitro[PageCache][StoreFrontWidget]" class="form-control NitroPageCacheStoreFrontWidget">
+            <option value="showOnlyWhenAdminIsLogged" {{ not nitroData.Nitro.PageCache.StoreFrontWidget or nitroData.Nitro.PageCache.StoreFrontWidget == 'showOnlyWhenAdminIsLogged' ? 'selected' }}>Show Only When Admin is Logged In</option>
+            <option value="showAlways" {{ nitroData.Nitro.PageCache.StoreFrontWidget == 'showAlways' ? 'selected' }}>Show Always</option>
+            <option value="showNever" {{ nitroData.Nitro.PageCache.StoreFrontWidget == 'showNever' ? 'selected' }}>Show Never</option>
+          </select>
+        </div>
+      </div>
+    </div>          
+  </div>
+  <div class="col-md-5">
+    <div class="box-heading"><h1>Manually Pre-Cache pages</h1></div>
+    <div class="box-content">
+      <p>
+      NitroPack PageCache is a fast render output cache mechanism that serves already processed content directly to your visitors. By default, the cache is created on the first page visit by the first visitor of the store, and on this very first visit by the first visitor, the page is not load from cache. After that all other visitors will get this page loaded from the cache.
+      </p>
+      <p>
+      Pre-caching will do these initial requests to common pages in your OpenCart store. These include: home page, categories, information pages, special offers.
+      </p>
+      <p>
+      <strong>Note: </strong> This pre-caching tool is an optional way to simulate the first-visitor of your store to create the cache. It is not required to run this tool after each clear cache. It will just make the cache serving to the first visitor of your store possible, since the cache will be already created for her/him.
+      </p>
+
+      <div class="spacer10">
+        <a id="precache_start" class="btn btn-primary"><i class="icon-hdd"></i> Pre-cache sitemap pages</a>
+        <a id="precache_abort" class="btn btn-default"><i class="icon-remove"></i> Abort</a>
+      </div>
+
+      <div class="progress spacer10"><div id="precache_progressbar" class="progress-bar" style="width: 0%;"></div></div>
+
+      <p id="precache_details"></p>
+
+      <script type="text/javascript">
+        $(document).ready(function() {
+          nitro.precache.setConfig({
+            stack_url : '{{ precacheStackUrl }}',
+            domain: 'http://' + location.hostname,
+            license: '{{ nitroData.Nitro.License ? nitroData.Nitro.License.licenseCode : "" }}',
+            progressbar_selector : '#precache_progressbar',
+            output_selector : '#precache_details'
+          });
+
+          $('#precache_start').click(function() {
+            nitro.precache.start();
+          });
+
+          $('#precache_abort').click(function() {
+            nitro.precache.abort();
+          });
+        });
+      </script>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md-8">
+    <div class="box-heading"><h1>CloudFlare CDN Service</h1></div>
+    <div class="box-content">
+      <div class="row form-group">
+        <div class="col-md-3">CloudFlare Service<span class="help">Enable this if you have configured CloudFlare for your store. This setting will make your OpenCart regard the HTTP_CF_CONNECTING_IP header by CloudFlare.</span></div>
+        <div class="col-md-3">
+          <select name="Nitro[CDNCloudFlare][Enabled]" class="form-control NitroCDNCloudFlare">
+            <option value="no" {{ nitroData.Nitro.CDNCloudFlare.Enabled != 'yes' ? 'selected' }}>Disabled</option>
+            <option value="yes" {{ nitroData.Nitro.CDNCloudFlare.Enabled == 'yes' ? 'selected' }}>Enabled</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="box-heading"><h1><i class="icon-info-sign"></i>&nbsp;What is CloudFlare?</h1></div>
+    <div class="box-content" style="min-height:150px; line-height:20px;">
+      <p>CloudFlare is an online platform which protects and accelerates your site. CloudFlare gives you the chance to use its fast CDN network to distribute your content across an intelligent global network. This gives your visitors fast page load times and the top performance.</p><p> 
+      Another great advantage of using CloudFlare is that their platform will also block threats and limit abusive bots and crawlers from wasting your bandwidth and server resources.</p>
+      <button class="btn btn-default btn-small" type="button" onclick="window.open('https://www.cloudflare.com/sign-up')"><i class="fa fa-external-link"></i>&nbsp;Sign Up</button>
+      or 
+      <button class="btn btn-default btn-small" type="button" onclick="window.open('https://www.cloudflare.com/login')"><i class="fa fa-external-link"></i>&nbsp;Login</button> in CloudFlare
+    </div>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+2019-11-15 13:02:48 - MOD: Modification Default
+
+FILE: system/engine/action.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 69
+
+FILE: system/engine/loader.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 77
+LINE: 151
+LINE: 168
+
+FILE: system/library/config.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 59
+
+FILE: system/library/language.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 67
+LINE: 73
+
+FILE: system/library/template/template.php
+REGEX: ~(require|include)(_once)?\(([^)]+)~
+LINE: 18
+
+FILE: system/library/template/twig.php
+CODE: $loader = new \Twig_Loader_Filesystem(DIR_TEMPLATE);
+LINE: 19
+----------------------------------------------------------------
+MOD: ocStore next default
+
+FILE: catalog/controller/extension/module/bestseller.php
+CODE: public function index($setting) {
+LINE: 8
+CODE: if ($data['products']) {
+NOT FOUND - OPERATIONS ABORTED!
+
+FILE: catalog/controller/extension/module/featured.php
+CODE: public function index($setting) {
+LINE: 8
+CODE: if ($data['products']) {
+LINE: 76
+
+FILE: catalog/controller/extension/module/featured_article.php
+CODE: public function index($setting) {
+LINE: 11
+CODE: if ($data['products']) {
+NOT FOUND - OPERATIONS ABORTED!
+
+FILE: catalog/controller/extension/module/featured_product.php
+CODE: public function index($setting) {
+LINE: 11
+CODE: if ($data['products']) {
+NOT FOUND - OPERATIONS ABORTED!
+
+FILE: catalog/controller/extension/module/latest.php
+CODE: public function index($setting) {
+LINE: 8
+CODE: if ($data['products']) {
+NOT FOUND - OPERATIONS ABORTED!
+
+FILE: catalog/controller/extension/module/special.php
+CODE: public function index($setting) {
+LINE: 8
+CODE: if ($data['products']) {
+NOT FOUND - OPERATIONS ABORTED!
+
+FILE: catalog/controller/common/header.php
+CODE: $data['cart'] = $this->load->controller('common/cart');
+LINE: 101
+
+FILE: catalog/controller/common/footer.php
+CODE: return $this->load->view('common/footer', $data);
+LINE: 63
+CODE: $data['telephone'] = $this->config->get('config_telephone');
+LINE: 91
+
+FILE: catalog/language/en-gb/common/footer.php
+CODE: $_['text_information']  = 'Information';
+LINE: 13
+
+FILE: catalog/language/ru-ru/common/footer.php
+CODE: $_['text_information']  = 'Информация';
+LINE: 13
+CODE: $data['scripts'] = $this->document->getScripts('footer');
+LINE: 77
+CODE: $data['contact'] = $this->url->link('information/contact');
+LINE: 22
+
+FILE: catalog/language/en-gb/error/not_found.php
+CODE: $_['heading_title'] = 'The page you requested cannot be found!';
+LINE: 2
+CODE: $_['text_error']    = 'The page you requested cannot be found.';
+LINE: 7
+
+FILE: catalog/language/ru-ru/error/not_found.php
+CODE: $_['heading_title'] = 'Запрашиваемая страница не найдена!';
+LINE: 5
+CODE: $_['text_error']    = 'Запрашиваемая страница не найдена!';
+LINE: 10
+
+FILE: catalog/controller/product/product.php
+CODE: $data['model'] = $product_info['model'];
+LINE: 258
+CODE: $data['text_model'] = $this->language->get('text_model');
+NOT FOUND - OPERATIONS ABORTED!
+
+FILE: catalog/language/ru-ru/product/product.php
+CODE: $_['text_model']                              = 'Код товара:';
+NOT FOUND - OPERATIONS ABORTED!
+
+FILE: catalog/language/en-gb/product/product.php
+CODE: $_['text_model']               = 'Product Code:';
+LINE: 8
+----------------------------------------------------------------
+MOD: Режим обслуживания
+
+FILE: catalog/view/theme/default/template/common/maintenance.twig
+CODE: {{ header }}
+LINE: 0
+CODE: {{ footer }}
+LINE: 6
+
+FILE: catalog/view/theme/nextdef/template/common/maintenance.twig
+CODE: {{ header }}
+LINE: 0
+CODE: {{ footer }}
+LINE: 6
+
+FILE: catalog/controller/common/maintenance.php
+CODE: $data['footer'] = $this->load->controller('common/footer');
+LINE: 38
+
+FILE: admin/controller/common/dashboard.php
+CODE: public function index() {
+LINE: 10
+----------------------------------------------------------------

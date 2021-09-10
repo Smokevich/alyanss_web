@@ -1,0 +1,164 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+    
+      <div class="pull-right">
+        <button type="submit" form="form-sbrf_online" class="btn btn-primary"><i class="fa fa-save"></i> {{ button_save }}</button>
+        <a href="{{ cancel }}" class="btn btn-default"><i class="fa fa-reply"></i> {{ button_cancel }}</a></div>
+      <h1><img src="view/image/payment/sbrf.png" width="26" height="25"> {{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if (error_warning) %} 
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-sbrf_online" class="form-horizontal">
+          {% for language in languages %} 
+          <div class="form-group required">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_bank{{ language.language_id }}">{{ entry_bank }}</label>
+            <div class="col-sm-10">
+              <span class="help-block">{{ help_bank }}</span>
+              <div class="input-group">
+                {% set language_image = 'language/%1$s/%1$s.png' | format(language.code) %}
+                <span class="input-group-addon"><img src="{{ language_image }}" title="{{ language.name }}" /></span>
+                <textarea name="payment_sbrf_online_bank[{{ language.language_id }}]" rows="10"
+                          id="input-payment_sbrf_online_bank{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}"
+                          >{{ payment_sbrf_online_bank[language.language_id] is defined ? payment_sbrf_online_bank[language.language_id] : text_bank_default }}</textarea>
+              </div>
+              {% if (error_bank) %}
+              <div class="text-danger">{{ error_bank }}</div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+          {% for language in languages %}
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_page_success{{ language.language_id }}">{{ entry_page_success }}</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                {% set language_image = 'language/%1$s/%1$s.png' | format(language.code) %}
+                <span class="input-group-addon"><img src="{{ language_image }}" title="{{ language.name }}" /></span>
+                <textarea name="payment_sbrf_online_page_success[{{ language.language_id }}]" rows="10"
+                          id="input-payment_sbrf_online_page_success{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}"
+                          >{{ payment_sbrf_online_page_success[language.language_id] is defined ? payment_sbrf_online_page_success[language.language_id] : text_page_success_default }}</textarea>
+              </div>
+              <span class="help-block">{{ help_page_success }}</span>
+            </div>
+          </div>
+          {% endfor %}
+          {% for language in languages %} 
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_title{{ language.language_id }}">{{ entry_title }}</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                {% set language_image = 'language/%1$s/%1$s.png' | format(language.code) %}
+                <span class="input-group-addon"><img src="{{ language_image }}" title="{{ language.name }}" /></span>
+                <input type="text" name="payment_sbrf_online_langdata[{{ language.language_id }}][title]"
+                     value="{{ payment_sbrf_online_langdata[language.language_id].title is not empty ? payment_sbrf_online_langdata[language.language_id].title : title_default }}"
+                     placeholder="{{ entry_title }}" id="input-payment_sbrf_online_title{{ language.language_id }}" class="form-control" />
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          {% for language in languages %}
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_description{{ language.language_id }}">{{ entry_description }}</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                {% set language_image = 'language/%1$s/%1$s.png' | format(language.code) %}
+                <span class="input-group-addon"><img src="{{ language_image }}" title="{{ language.name }}" /></span>
+                <textarea name="payment_sbrf_online_langdata[{{ language.language_id }}][description]"
+                          id="input-payment_sbrf_online_description{{ language.language_id }}" rows="10" class="form-control"
+                          >{{ payment_sbrf_online_langdata[language.language_id].description is defined ? payment_sbrf_online_langdata[language.language_id].description : '' }}</textarea>
+              </div>
+              <span class="help-block">{{ help_description }}</span>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_icon">{{ entry_icon }}</label>
+            <div class="col-sm-10">
+                  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn btn-success{{ payment_sbrf_online_icon ? ' active' : '' }}"><input type="radio" name="payment_sbrf_online_icon" value="1"{{ payment_sbrf_online_icon ? ' checked="checked"' : '' }} /> {{ text_yes }}</label>
+                      <label class="btn btn-danger{{ not payment_sbrf_online_icon ? ' active' : '' }}"><input type="radio" name="payment_sbrf_online_icon" value="0"{{ not payment_sbrf_online_icon ? ' checked="checked"' : '' }} /> {{ text_no }}</label>
+                  </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_minimal_order">{{ entry_minimal_order }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_sbrf_online_minimal_order" value="{{ payment_sbrf_online_minimal_order }}"
+                     placeholder="{{ entry_minimal_order }}" id="input-payment_sbrf_online_minimal_order" class="form-control" />
+              <span class="help-block">{{ help_minimal_order }}</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_maximal_order">{{ entry_maximal_order }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_sbrf_online_maximal_order" value="{{ payment_sbrf_online_maximal_order }}"
+                     placeholder="{{ entry_maximal_order }}" id="input-payment_sbrf_online_maximal_order" class="form-control" />
+              <span class="help-block">{{ help_maximal_order }}</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_order_status_id">{{ entry_order_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_sbrf_online_order_status_id" id="input-payment_sbrf_online_order_status_id" class="form-control">
+                {% for order_status in order_statuses %} 
+                {% if (order_status.order_status_id == payment_sbrf_online_order_status_id) %} 
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %} 
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %} 
+                {% endfor %} 
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_geo_zone_id">{{ entry_geo_zone }}</label>
+            <div class="col-sm-10">
+              <select name="payment_sbrf_online_geo_zone_id" id="input-payment_sbrf_online_geo_zone_id" class="form-control">
+                <option value="0">{{ text_all_zones }}</option>
+                {% for geo_zone in geo_zones %} 
+                {% if (geo_zone.geo_zone_id == payment_sbrf_online_geo_zone_id) %} 
+                <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+                {% else %} 
+                <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+                {% endif %} 
+                {% endfor %} 
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_status">{{ entry_status }}</label>
+            <div class="col-sm-10">
+                  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn btn-success{{ payment_sbrf_online_status ? ' active' : '' }}"><input type="radio" name="payment_sbrf_online_status" value="1"{{ payment_sbrf_online_status ? ' checked="checked"' : '' }} /> {{ text_enabled }}</label>
+                      <label class="btn btn-danger{{ not payment_sbrf_online_status ? ' active' : '' }}"><input type="radio" name="payment_sbrf_online_status" value="0"{{ not payment_sbrf_online_status ? ' checked="checked"' : '' }} /> {{ text_disabled }}</label>
+                  </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment_sbrf_online_sort_order">{{ entry_sort_order }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_sbrf_online_sort_order" value="{{ payment_sbrf_online_sort_order }}"
+                     placeholder="{{ entry_sort_order }}" id="input-payment_sbrf_online_sort_order" class="form-control" />
+            </div>
+          </div>
+        </form>
+        <div style="padding: 15px 15px; border:1px solid #ccc; margin-top: 15px; box-shadow:0 0px 5px rgba(0,0,0,0.1);">{{ text_copyright }}</div>
+      </div><!-- </div class="panel-body"> -->
+    </div><!-- </div class="panel panel-default"> -->
+  </div><!-- </div class="container-fluid"> -->
+</div><!-- </div id="content"> -->
+{{ footer }}
