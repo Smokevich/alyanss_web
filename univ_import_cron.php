@@ -316,7 +316,7 @@ if (version_compare(VERSION, '2.2', '>=')) {
   if (substr(VERSION, 0, 1) == '2') {
     $cache = new Cache('file');
   } else {
-    $cache = new Cache();
+    $cache = new Cache`()`;
   }
   $registry->set('cache', $cache); 
 
